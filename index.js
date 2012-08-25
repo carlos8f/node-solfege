@@ -1,5 +1,6 @@
 // The set of standard chromatic solfege syllables.
 var syllables = exports.syllables = {
+  de: { alter: -1, degree: 1, abs: -1 },
   do: { alter: 0, degree: 1, abs: 0 },
   di: { alter: 1, degree: 1, abs: 1 },
   ra: { alter: -1, degree: 2, abs: 1 },
@@ -39,7 +40,7 @@ function syllable (input) {
 }
 exports.syllable = syllable;
 
-// Go up to the target syllable, and return the relative pitch difference.
+// Go up to the target syllable, and return the pitch difference.
 function moveUp (current, target) {
   current = syllable(current);
   target = syllable(target);
@@ -59,7 +60,7 @@ function moveUp (current, target) {
 }
 exports.moveUp = moveUp;
 
-// Go down to the target syllable, and return the relative pitch difference.
+// Go down to the target syllable, and return the pitch difference.
 function moveDown (current, target) {
   current = syllable(current);
   target = syllable(target);
@@ -75,16 +76,18 @@ function moveDown (current, target) {
     }
     pitch += scale[degree - 1];
   }
-  return pitch - target.alter;
+  return (pitch - target.alter) * -1;
 }
 exports.moveDown = moveDown;
 
 // Find the nearest target syllable (by interval comparison), and return the
-// absolute pitch difference.
-function findNearest (current, target) {
-  
+// pitch difference.
+function moveTo (current, target) {
+  return getInterval(current, target) > 4
+    ? moveDown(current, target)
+    : moveUp(current, target);
 }
-exports.findNearest = findNearest;
+exports.moveTo = moveTo;
 
 // Invert the interval.
 function invertInterval (interval) {
