@@ -89,19 +89,7 @@ function moveTo (current, target) {
 }
 exports.moveTo = moveTo;
 
-// Invert the interval.
-function invertInterval (interval) {
-  return 9 - interval;
-}
-exports.invertInterval = invertInterval;
-
-// Invert the pitch.
-function invertPitch (pitch) {
-  return 12 - pitch;
-}
-exports.invertPitch = invertPitch;
-
-// Get the interval between current and target.
+// Get the interval between current and target syllables.
 function getInterval (current, target) {
   current = syllable(current);
   target = syllable(target);
@@ -113,3 +101,9 @@ function getInterval (current, target) {
   return target.degree - current.degree + 1 + addon;
 }
 exports.getInterval = getInterval;
+
+// Invert the interval.
+function invertInterval (interval) {
+  return 9 - interval;
+}
+exports.invertInterval = invertInterval;

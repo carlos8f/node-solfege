@@ -1,4 +1,5 @@
 var getInterval = solfege.getInterval
+  , invertInterval = solfege.invertInterval
 
 describe('interval', function () {
   it('computes', function () {
@@ -22,5 +23,16 @@ describe('interval', function () {
     assert.equal(getInterval('sol', 'do'), 4);
     assert.equal(getInterval('re', 'fi'), 3);
     assert.equal(getInterval('se', 'te'), 3);
+  });
+
+  it('inverts', function () {
+    assert.equal(invertInterval(1), 8);
+    assert.equal(invertInterval(2), 7);
+    assert.equal(invertInterval(3), 6);
+    assert.equal(invertInterval(4), 5);
+    assert.equal(invertInterval(5), 4);
+    assert.equal(invertInterval(6), 3);
+    assert.equal(invertInterval(7), 2);
+    assert.equal(invertInterval(8), 1);
   });
 });
