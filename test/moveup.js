@@ -1,7 +1,7 @@
 var move = solfege.moveUp
 
 describe('move up', function () {
-  it('moves up from do', function () {
+  it('from do', function () {
     assert.equal(move('do', 'de'), -1);
     assert.equal(move('do', 'do'), 0);
     assert.equal(move('do', 'di'), 1);
@@ -22,7 +22,7 @@ describe('move up', function () {
     assert.equal(move('do', 'ti'), 11);
   });
 
-  it('moves up from sol', function () {
+  it('from sol', function () {
     assert.equal(move('sol', 'sol'), 0);
     assert.equal(move('sol', 'si'), 1);
     assert.equal(move('sol', 'le'), 1);
