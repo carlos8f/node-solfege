@@ -1,4 +1,5 @@
-var symbols = exports.symbols = {
+// The set of standard chromatic solfege syllables.
+var syllables = exports.syllables = {
   do: { alter: 0, degree: 1, abs: 0 },
   di: { alter: 1, degree: 1, abs: 1 },
   ra: { alter: -1, degree: 2, abs: 1 },
@@ -18,50 +19,94 @@ var symbols = exports.symbols = {
   ti: { alter: 0, degree: 7, abs: 11 }
 };
 
-// Given starting symbol, go up to a symbol, and return
-// the total pitch difference.
-function moveUp (currentSymbol, targetSymbol) {
-  if (typeof currentSymbol === 'string') {
-    currentSymbol = symbols[currentSymbol];
+// Idempotent conversion of a string syllable into an object.
+function syllable (input) {
+  if (typeof input === 'string') {
+    input = input.toLowerCase();
+    if (input === 'so') input = 'sol';
+    var ret = syllables[input];
+    if (!ret) {
+      throw new Error('invalid solfege syllable: ' + input);
+    }
+    return ret;
   }
-  if (typeof targetSymbol === 'string') {
-    targetSymbol = symbols[targetSymbol];
+  else if (typeof input === 'object') {
+    return input;
   }
-  var pitch = -currentSymbol.alter
-    , degree = currentSymbol.degree
+  else {
+    throw new Error('invalid solfege syllable: ' + input);
+  }
+}
+exports.syllable = syllable;
+
+// Go up to the target syllable, and return the relative pitch difference.
+function moveUp (current, target) {
+  current = syllable(current);
+  target = syllable(target);
+
+  var pitch = -current.alter
+    , degree = current.degree
     , scale = [1, 2, 2, 1, 2, 2, 2]
 
-  while (degree !== targetSymbol.degree) {
+  while (degree !== target.degree) {
     degree++;
     if (degree > scale.length) {
       degree = 1;
     }
     pitch += scale[degree - 1];
   }
-  return pitch + targetSymbol.alter;
+  return pitch + target.alter;
 }
 exports.moveUp = moveUp;
 
-// Given starting symbol, go down to a symbol, and return
-// the total pitch difference.
-function moveDown (currentSymbol, targetSymbol) {
-  if (typeof currentSymbol === 'string') {
-    currentSymbol = symbols[currentSymbol];
-  }
-  if (typeof targetSymbol === 'string') {
-    targetSymbol = symbols[targetSymbol];
-  }
-  var pitch = currentSymbol.alter
-    , degree = currentSymbol.degree
+// Go down to the target syllable, and return the relative pitch difference.
+function moveDown (current, target) {
+  current = syllable(current);
+  target = syllable(target);
+
+  var pitch = current.alter
+    , degree = current.degree
     , scale = [2, 2, 1, 2, 2, 2, 1]
 
-  while (degree !== targetSymbol.degree) {
+  while (degree !== target.degree) {
     degree--;
     if (degree < 1) {
       degree = scale.length;
     }
     pitch += scale[degree - 1];
   }
-  return pitch - targetSymbol.alter;
+  return pitch - target.alter;
 }
 exports.moveDown = moveDown;
+
+// Find the nearest target syllable (by interval comparison), and return the
+// absolute pitch difference.
+function findNearest (current, target) {
+  
+}
+exports.findNearest = findNearest;
+
+// Invert the interval.
+function invertInterval (interval) {
+  return 9 - interval;
+}
+exports.invertInterval = invertInterval;
+
+// Invert the pitch.
+function invertPitch (pitch) {
+  return 12 - pitch;
+}
+exports.invertPitch = invertPitch;
+
+// Get the interval between current and target.
+function getInterval (current, target) {
+  current = syllable(current);
+  target = syllable(target);
+
+  var addon = 0;
+  if (target.degree < current.degree) {
+    addon = 7;
+  }
+  return target.degree - current.degree + 1 + addon;
+}
+exports.getInterval = getInterval;
