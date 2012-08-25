@@ -1,7 +1,7 @@
 var getInterval = solfege.getInterval
 
 describe('interval', function () {
-  it('gets correct interval', function () {
+  it('computes', function () {
     assert.equal(getInterval('do', 'do'), 1);
     assert.equal(getInterval('do', 'de'), 1);
     assert.equal(getInterval('do', 'ra'), 2);

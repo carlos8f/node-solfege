@@ -1,6 +1,6 @@
 var moveTo = solfege.moveTo
 
-describe('moveTo to', function () {
+describe('move to', function () {
   it('closest interval from do', function () {
     assert.equal(moveTo('do', 'de'), -1);
     assert.equal(moveTo('do', 'do'), 0);
